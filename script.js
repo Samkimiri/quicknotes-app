@@ -11,6 +11,7 @@ let notes = [];
 
 // Render notes
 function render() {
+  // Clear the existing cards
   notesList.replaceChildren();
 
   // Update note count
@@ -22,7 +23,7 @@ function render() {
     noteCount.textContent = `You have ${notes.length} notes.`;
   }
 
-  // Create a card for every note
+  // Create a card for each note
   notes.forEach((note) => {
     const li = document.createElement("li");
     li.classList.add("note", `category-${note.category}`);
@@ -49,7 +50,7 @@ function render() {
       deleteNote(note.id);
     });
 
-    // Build the card
+    // Add everything to the card
     li.appendChild(text);
     li.appendChild(category);
     li.appendChild(date);
@@ -67,22 +68,22 @@ form.addEventListener("submit", (event) => {
   const text = input.value.trim();
   const category = categoryInput.value;
 
-  // Clear previous error
+  // Clear previous error message
   errorMessage.textContent = "";
 
-  // Validate empty note
+  // Check for empty note
   if (text === "") {
     errorMessage.textContent = "Please enter a note.";
     return;
   }
 
-  // Validate note length
+  // Check note length
   if (text.length > 200) {
     errorMessage.textContent = "Note must be 200 characters or less.";
     return;
   }
 
-  // Create a note object
+  // Create the note object
   const note = {
     id: Date.now(),
     text: text,
@@ -93,10 +94,10 @@ form.addEventListener("submit", (event) => {
   // Add note to the array
   notes.push(note);
 
-  // Re-render the notes
+  // Display the notes
   render();
 
-  // Clear the form
+  // Clear the input
   input.value = "";
   input.focus();
 });
