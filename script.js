@@ -6,6 +6,7 @@ const notesList = document.querySelector("#notes-list");
 const noteCount = document.querySelector("#note-count");
 const errorMessage = document.querySelector("#error-message");
 const searchInput = document.querySelector("#search-input");
+const clearAllButton = document.querySelector("#clear-all-btn");
 
 // Storage key
 const STORAGE_KEY = "quicknotes";
@@ -31,10 +32,8 @@ function saveNotes() {
 
 // Render notes
 function render(notesToRender = notes) {
-  // Clear the existing cards
   notesList.replaceChildren();
 
-  // Update note count
   if (notesToRender.length === 0) {
     noteCount.textContent = "You have no notes yet.";
   } else if (notesToRender.length === 1) {
@@ -43,24 +42,19 @@ function render(notesToRender = notes) {
     noteCount.textContent = `You have ${notesToRender.length} notes.`;
   }
 
-  // Create a card for each note
   notesToRender.forEach((note) => {
     const li = document.createElement("li");
     li.classList.add("note", `category-${note.category}`);
 
-    // Note text
     const text = document.createElement("p");
     text.textContent = note.text;
 
-    // Category
     const category = document.createElement("small");
     category.textContent = `Category: ${note.category}`;
 
-    // Date
     const date = document.createElement("small");
     date.textContent = `Created: ${note.createdAt}`;
 
-    // Delete button
     const deleteButton = document.createElement("button");
     deleteButton.textContent = "Delete";
     deleteButton.type = "button";
@@ -69,40 +63,33 @@ function render(notesToRender = notes) {
       deleteNote(note.id);
     });
 
-    // Build the card
     li.appendChild(text);
     li.appendChild(category);
     li.appendChild(date);
     li.appendChild(deleteButton);
-
-    // Add card to the list
     notesList.appendChild(li);
   });
 }
 
-// Add a note
+// Add a new note
 form.addEventListener("submit", (event) => {
   event.preventDefault();
 
   const text = input.value.trim();
   const category = categoryInput.value;
 
-  // Clear previous error
   errorMessage.textContent = "";
 
-  // Validate empty note
   if (text === "") {
     errorMessage.textContent = "Please enter a note.";
     return;
   }
 
-  // Validate note length
   if (text.length > 200) {
     errorMessage.textContent = "Note must be 200 characters or less.";
     return;
   }
 
-  // Create the note
   const note = {
     id: Date.now(),
     text: text,
@@ -110,28 +97,18 @@ form.addEventListener("submit", (event) => {
     createdAt: new Date().toLocaleString()
   };
 
-  // Add note to array
   notes.push(note);
-
-  // Save notes
   saveNotes();
-
-  // Render notes
   render();
 
-  // Clear input
   input.value = "";
   input.focus();
 });
 
-// Delete a note
+// Delete one note
 function deleteNote(id) {
   notes = notes.filter((note) => note.id !== id);
-
-  // Save updated notes
   saveNotes();
-
-  // Render updated list
   render();
 }
 
@@ -144,6 +121,19 @@ searchInput.addEventListener("input", () => {
   });
 
   render(filteredNotes);
+});
+
+// Clear all notes
+clearAllButton.addEventListener("click", () => {
+  const confirmed = confirm("Delete all notes?");
+
+  if (!confirmed) {
+    return;
+  }
+
+  notes = [];
+  saveNotes();
+  render();
 });
 
 // Initial render
