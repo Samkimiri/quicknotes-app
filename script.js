@@ -5,26 +5,46 @@ const categoryInput = document.querySelector("#note-category");
 const notesList = document.querySelector("#notes-list");
 const noteCount = document.querySelector("#note-count");
 const errorMessage = document.querySelector("#error-message");
+const searchInput = document.querySelector("#search-input");
 
-// Notes array
-let notes = [];
+// Storage key
+const STORAGE_KEY = "quicknotes";
+
+// Load notes from localStorage
+let notes = loadNotes();
+
+// Load saved notes
+function loadNotes() {
+  const savedNotes = localStorage.getItem(STORAGE_KEY);
+
+  if (savedNotes) {
+    return JSON.parse(savedNotes);
+  }
+
+  return [];
+}
+
+// Save notes to localStorage
+function saveNotes() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(notes));
+}
 
 // Render notes
-function render() {
+function render(notesToRender = notes) {
   // Clear the existing cards
   notesList.replaceChildren();
 
   // Update note count
-  if (notes.length === 0) {
+  if (notesToRender.length === 0) {
     noteCount.textContent = "You have no notes yet.";
-  } else if (notes.length === 1) {
+  } else if (notesToRender.length === 1) {
     noteCount.textContent = "You have 1 note.";
   } else {
-    noteCount.textContent = `You have ${notes.length} notes.`;
+    noteCount.textContent = `You have ${notesToRender.length} notes.`;
   }
 
   // Create a card for each note
-  notes.forEach((note) => {
+  notesToRender.forEach((note) => {
     const li = document.createElement("li");
     li.classList.add("note", `category-${note.category}`);
 
@@ -45,18 +65,17 @@ function render() {
     deleteButton.textContent = "Delete";
     deleteButton.type = "button";
 
-    // Delete this note when clicked
     deleteButton.addEventListener("click", () => {
       deleteNote(note.id);
     });
 
-    // Add everything to the card
+    // Build the card
     li.appendChild(text);
     li.appendChild(category);
     li.appendChild(date);
     li.appendChild(deleteButton);
 
-    // Add the card to the list
+    // Add card to the list
     notesList.appendChild(li);
   });
 }
@@ -68,22 +87,22 @@ form.addEventListener("submit", (event) => {
   const text = input.value.trim();
   const category = categoryInput.value;
 
-  // Clear previous error message
+  // Clear previous error
   errorMessage.textContent = "";
 
-  // Check for empty note
+  // Validate empty note
   if (text === "") {
     errorMessage.textContent = "Please enter a note.";
     return;
   }
 
-  // Check note length
+  // Validate note length
   if (text.length > 200) {
     errorMessage.textContent = "Note must be 200 characters or less.";
     return;
   }
 
-  // Create the note object
+  // Create the note
   const note = {
     id: Date.now(),
     text: text,
@@ -91,13 +110,16 @@ form.addEventListener("submit", (event) => {
     createdAt: new Date().toLocaleString()
   };
 
-  // Add note to the array
+  // Add note to array
   notes.push(note);
 
-  // Display the notes
+  // Save notes
+  saveNotes();
+
+  // Render notes
   render();
 
-  // Clear the input
+  // Clear input
   input.value = "";
   input.focus();
 });
@@ -106,8 +128,23 @@ form.addEventListener("submit", (event) => {
 function deleteNote(id) {
   notes = notes.filter((note) => note.id !== id);
 
+  // Save updated notes
+  saveNotes();
+
+  // Render updated list
   render();
 }
+
+// Search notes
+searchInput.addEventListener("input", () => {
+  const searchTerm = searchInput.value.trim().toLowerCase();
+
+  const filteredNotes = notes.filter((note) => {
+    return note.text.toLowerCase().includes(searchTerm);
+  });
+
+  render(filteredNotes);
+});
 
 // Initial render
 render();
