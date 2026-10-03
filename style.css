@@ -1,0 +1,173 @@
+/* ---------- Reset ---------- */
+
+* {
+  box-sizing: border-box;
+  }
+
+/* ---------- Page ---------- */
+
+body {
+margin: 0;
+font-family: Arial, sans-serif;
+background-color: #f4f6f8;
+color: #222;
+line-height: 1.6;
+}
+
+/* ---------- Header ---------- */
+
+header {
+background-color: #0b7a75;
+color: white;
+text-align: center;
+padding: 32px 20px;
+}
+
+header h1 {
+margin: 0;
+}
+
+header p {
+margin: 8px 0 0;
+}
+
+/* ---------- Main ---------- */
+
+main {
+max-width: 700px;
+margin: 30px auto;
+padding: 0 20px;
+}
+
+/* ---------- Sections ---------- */
+
+section {
+background-color: white;
+padding: 24px;
+margin-bottom: 24px;
+border-radius: 10px;
+box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+section h2 {
+margin-top: 0;
+}
+
+/* ---------- Form ---------- */
+
+form {
+display: flex;
+gap: 12px;
+align-items: center;
+flex-wrap: wrap;
+}
+
+form label {
+font-weight: bold;
+}
+
+form input,
+form select {
+padding: 10px;
+border: 1px solid #ccc;
+border-radius: 6px;
+font-size: 1rem;
+}
+
+form input {
+flex: 1;
+min-width: 200px;
+}
+
+/* ---------- Search ---------- */
+
+#search-input {
+width: 100%;
+padding: 10px;
+border: 1px solid #ccc;
+border-radius: 6px;
+font-size: 1rem;
+}
+
+/* ---------- Buttons ---------- */
+
+button {
+padding: 10px 16px;
+border: none;
+border-radius: 6px;
+background-color: #0b7a75;
+color: white;
+cursor: pointer;
+}
+
+button:hover {
+background-color: #075c58;
+}
+
+/* ---------- Error ---------- */
+
+#error-message {
+color: red;
+font-weight: bold;
+min-height: 24px;
+}
+
+/* ---------- Notes list ---------- */
+
+#notes-list {
+list-style: none;
+padding: 0;
+margin: 20px 0 0;
+}
+
+/* ---------- Note cards ---------- */
+
+.note {
+padding: 16px;
+border: 1px solid #ddd;
+border-radius: 8px;
+margin-bottom: 12px;
+background-color: #fafafa;
+}
+
+/* ---------- Category styles ---------- */
+
+.category-personal {
+border-left: 6px solid teal;
+}
+
+.category-work {
+border-left: 6px solid darkred;
+}
+
+.category-study {
+border-left: 6px solid blue;
+}
+
+/* ---------- Footer ---------- */
+
+footer {
+text-align: center;
+padding: 24px;
+color: #666;
+}
+
+/* ---------- Mobile layout ---------- */
+
+@media (max-width: 600px) {
+main {
+margin-top: 20px;
+padding: 0 12px;
+}
+
+form {
+flex-direction: column;
+align-items: stretch;
+}
+
+form input,
+form select,
+form button {
+width: 100%;
+}
+}
